@@ -17,7 +17,6 @@ const routes = constructRoutes(
   data,
 );
 
-
 const applications = constructApplications({
   routes,
   loadApp({ name }) {
