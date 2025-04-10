@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Angular Microfrontends</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <meta name="importmap-type" use-injector />
+
+  <!-- Add your organization's prod import map URL to this script's src  -->
+  <script type="injector-importmap" src="http://localhost:9005/importmap.json"></script>
+
+  <% if (isLocal) { %>
+    <script type="injector-importmap">
+    {
+      "imports": {
+        "@angular-microfrontends/root-config": "//localhost:9000/angular-microfrontends-root-config.js"
+      }
+    }
+  </script>
+  <% } %>
+
+  <script src="https://storage.googleapis.com/angular.microfrontends.app/deps/npm%3Aimport-map-overrides%405.1.1/dist/import-map-overrides.js"></script>
+  <script src="https://storage.googleapis.com/angular.microfrontends.app/deps/npm%3A%40single-spa/import-map-injector%402.0.1/lib/import-map-injector.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+    }
+    .welcome {
+      padding: 1em;
+    }
+    #main-content {
+      /* tus estilos aquí */
+      margin-top: 60px;
+    } 
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      /* Asegurarte de que quede arriba del resto */
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <template id="single-spa-layout">
+    <single-spa-router>
+      <!-- Navbar siempre activo -->
+      <nav>
+        <application name="@angular-mf/navbar"></application>
+      </nav>
+  
+      <!-- Contenido de tus apps por ruta -->
+      <main id="main-content">
+        <route path="/app1">
+          <application name="@klap/app1"></application>
+        </route>
+        <route path="/app2">
+          <application name="@klap/app2"></application>
+        </route>
+      </main>
+    </single-spa-router>
+  </template>
+  
+
+  <script>
+    window.importMapInjector.initPromise.then(() => {
+      import('@angular-microfrontends/root-config');
+    });
+  </script>
+  <import-map-overrides-full show-when-local-storage="devtools"></import-map-overrides-full>
+</body>
+</html>
